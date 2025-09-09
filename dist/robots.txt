@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://calculateyouremi.in/sitemap.xml
+Host: https://calculateyouremi.in
