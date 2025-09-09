@@ -72,6 +72,14 @@ export default function App() {
   const themeBg = dark ? 'bg-slate-900 text-slate-100' : 'bg-gradient-to-br from-white via-sky-50 to-sky-100 text-slate-900'
   const cardBg = dark ? 'bg-slate-800' : 'bg-white'
   const cardBorder = dark ? 'border-slate-700' : 'border-sky-200'
+  const inputClass = `mt-1 block w-full rounded-md p-2 ${dark ? 'bg-slate-700 text-slate-100 placeholder-slate-300 border border-slate-600' : 'bg-white text-slate-900 placeholder-slate-500 border border-sky-200'}`
+  const smallInputClass = `w-16 p-1 rounded-md ${dark ? 'bg-slate-700 text-slate-100 border border-slate-600' : 'bg-white text-slate-900 border border-sky-200'} text-center`
+  const btnBase = 'px-4 py-2 rounded-lg'
+  function loanBtnClass(type){
+    const selected = loanType === type
+    if(selected) return `${btnBase} bg-sky-600 text-white`
+    return `${btnBase} ${dark ? 'bg-slate-700 text-slate-100/90' : 'bg-white text-sky-700 border border-sky-300'}`
+  }
 
   return (
     <div className={`min-h-screen p-6 ${themeBg}`}>
@@ -85,9 +93,9 @@ export default function App() {
           <div className="flex items-center gap-3">
             <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={dark} onChange={()=>setDark(d=>!d)} /> Dark</label>
             <div className="flex gap-2">
-              <button onClick={()=>onLoanTypeChange('Home')} className="px-4 py-2 rounded-lg bg-sky-600 text-white">Home</button>
-              <button onClick={()=>onLoanTypeChange('Car')} className={`px-4 py-2 rounded-lg ${dark ? 'bg-slate-700 text-white' : 'bg-white text-sky-700 border border-sky-300'}`}>Car</button>
-              <button onClick={()=>onLoanTypeChange('Personal')} className={`px-4 py-2 rounded-lg ${dark ? 'bg-slate-700 text-white' : 'bg-white text-sky-700 border border-sky-300'}`}>Personal</button>
+              <button onClick={()=>onLoanTypeChange('Home')} className={loanBtnClass('Home')}>Home</button>
+              <button onClick={()=>onLoanTypeChange('Car')} className={loanBtnClass('Car')}>Car</button>
+              <button onClick={()=>onLoanTypeChange('Personal')} className={loanBtnClass('Personal')}>Personal</button>
             </div>
           </div>
         </header>
@@ -97,41 +105,41 @@ export default function App() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium">Loan Type</label>
-                <select value={loanType} onChange={(e)=>onLoanTypeChange(e.target.value)} className="mt-1 block w-full rounded-md p-2"><option>Home</option><option>Car</option><option>Personal</option></select>
+                <select value={loanType} onChange={(e)=>onLoanTypeChange(e.target.value)} className={inputClass}><option>Home</option><option>Car</option><option>Personal</option></select>
               </div>
               <div>
                 <label className="block text-sm font-medium">Start Month</label>
-                <input type="month" value={startMonth} onChange={(e)=>setStartMonth(e.target.value)} className="mt-1 block w-full rounded-md p-2" />
+                <input type="month" value={startMonth} onChange={(e)=>setStartMonth(e.target.value)} className={inputClass} />
               </div>
 
               <div>
                 <label className="block text-sm font-medium">Principal (₹)</label>
-                <input type="text" value={formatCurrencyInput(principal)} onChange={(e)=>onNumericInputChange(e,setPrincipal)} className="mt-1 block w-full rounded-md p-2" />
+                <input type="text" value={formatCurrencyInput(principal)} onChange={(e)=>onNumericInputChange(e,setPrincipal)} className={inputClass} />
               </div>
 
               <div>
                 <label className="block text-sm font-medium">Annual Interest Rate (%)</label>
-                <input type="number" step="0.01" value={annualRate} onChange={(e)=>setAnnualRate(Number(e.target.value))} className="mt-1 block w-full rounded-md p-2" />
+                <input type="number" step="0.01" value={annualRate} onChange={(e)=>setAnnualRate(Number(e.target.value))} className={inputClass} />
               </div>
 
               <div>
                 <label className="block text-sm font-medium">Tenure (Years)</label>
-                <input type="number" value={tenureYears} onChange={(e)=>{ const y = Number(e.target.value)||0; setTenureYears(y); setTenureMonths(Math.round(y*12)) }} className="mt-1 block w-full rounded-md p-2" />
+                <input type="number" value={tenureYears} onChange={(e)=>{ const y = Number(e.target.value)||0; setTenureYears(y); setTenureMonths(Math.round(y*12)) }} className={inputClass} />
               </div>
 
               <div>
                 <label className="block text-sm font-medium">Tenure (Months)</label>
-                <input type="number" value={tenureMonths} onChange={(e)=>{ const m = Math.max(0, Math.round(Number(e.target.value)||0)); setTenureMonths(m); setTenureYears(Math.round(m/12)) }} className="mt-1 block w-full rounded-md p-2" />
+                <input type="number" value={tenureMonths} onChange={(e)=>{ const m = Math.max(0, Math.round(Number(e.target.value)||0)); setTenureMonths(m); setTenureYears(Math.round(m/12)) }} className={inputClass} />
               </div>
 
               <div>
                 <label className="block text-sm font-medium">Extra Monthly Prepayment (₹)</label>
-                <input type="text" value={formatCurrencyInput(prepayment)} onChange={(e)=>onNumericInputChange(e,setPrepayment)} className="mt-1 block w-full rounded-md p-2" />
+                <input type="text" value={formatCurrencyInput(prepayment)} onChange={(e)=>onNumericInputChange(e,setPrepayment)} className={inputClass} />
               </div>
 
               <div>
                 <label className="block text-sm font-medium">Show Amortization Schedule</label>
-                <select value={showSchedule? 'yes':'no'} onChange={(e)=>setShowSchedule(e.target.value==='yes')} className="mt-1 block w-full rounded-md p-2"><option value="yes">Yes</option><option value="no">No</option></select>
+                <select value={showSchedule? 'yes':'no'} onChange={(e)=>setShowSchedule(e.target.value==='yes')} className={inputClass}><option value="yes">Yes</option><option value="no">No</option></select>
               </div>
             </div>
 
@@ -221,7 +229,7 @@ export default function App() {
             <div className="flex items-center gap-3 mb-3">
               <div className="flex items-center gap-2 text-sm">
                 <label>Rows per page:</label>
-                <select value={rowsPerPage} onChange={(e)=>{ setRowsPerPage(Number(e.target.value)); setPage(1); }} className="rounded-md p-1 border">
+                <select value={rowsPerPage} onChange={(e)=>{ setRowsPerPage(Number(e.target.value)); setPage(1); }} className={smallInputClass}>
                   <option value={10}>10</option>
                   <option value={20}>20</option>
                   <option value={50}>50</option>
@@ -229,18 +237,18 @@ export default function App() {
                 </select>
               </div>
 
-              <div className="ml-auto flex items-center gap-2 text-sm">
+                <div className="ml-auto flex items-center gap-2 text-sm">
                 <button onClick={()=>setPage(p=>Math.max(1,p-1))} disabled={page<=1} className="px-2 py-1 rounded-md border disabled:opacity-50">Prev</button>
                 <span>Page</span>
-                <input type="number" value={page} onChange={(e)=>{ const v = Math.max(1, Number(e.target.value)||1); setPage(v); }} className="w-16 p-1 rounded-md border text-center" />
+                <input type="number" value={page} onChange={(e)=>{ const v = Math.max(1, Number(e.target.value)||1); setPage(v); }} className={smallInputClass} />
                 <span>of {Math.max(1, Math.ceil(calc.schedule.length / rowsPerPage))}</span>
                 <button onClick={()=>setPage(p=>Math.min(Math.ceil(calc.schedule.length/rowsPerPage), p+1))} disabled={page>=Math.ceil(calc.schedule.length/rowsPerPage)} className="px-2 py-1 rounded-md border disabled:opacity-50">Next</button>
               </div>
             </div>
 
-            <div className="overflow-x-auto rounded-lg border">
+            <div className={`overflow-x-auto rounded-lg border ${dark ? 'border-slate-600' : ''}`}>
               <table className="min-w-full text-sm divide-y">
-                <thead className="bg-sky-50 sticky top-0">
+                <thead className={`${dark ? 'bg-slate-700 text-slate-100' : 'bg-sky-50'} sticky top-0`}>
                   <tr>
                     <th className="p-2 text-left">#</th>
                     <th className="p-2 text-left">Date</th>
@@ -260,7 +268,7 @@ export default function App() {
                     const end = Math.min(total, start + rowsPerPage)
                     const pageRows = calc.schedule.slice(start, end)
                     return pageRows.map(r => (
-                      <tr key={r.monthNumber} className="odd:bg-white even:bg-sky-50">
+                      <tr key={r.monthNumber} className={dark ? 'odd:bg-slate-800 even:bg-slate-700' : 'odd:bg-white even:bg-sky-50'}>
                         <td className="p-2">{r.monthNumber}</td>
                         <td className="p-2">{r.date}</td>
                         <td className="p-2 text-right">₹ {formatCurrencyInput(r.beginningBalance)}</td>
@@ -275,7 +283,7 @@ export default function App() {
               </table>
             </div>
 
-            <div className="mt-2 flex items-center justify-between text-sm text-gray-600">
+            <div className={`mt-2 flex items-center justify-between text-sm ${dark ? 'text-slate-300' : 'text-gray-600'}`}>
               <div>
                 Showing {Math.min(calc.schedule.length, (page-1)*rowsPerPage + 1)} - {Math.min(calc.schedule.length, page*rowsPerPage)} of {calc.schedule.length} rows.
               </div>
