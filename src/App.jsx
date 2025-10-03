@@ -112,8 +112,8 @@ export default function App() {
       <div className="max-w-6xl mx-auto">
   <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-3">
           <div>
-            <h1 className="text-3xl font-bold">CalculateYourEmi.in</h1>
-            <p className="text-sm opacity-80">Home · Car · Personal — estimates, charts & schedule</p>
+            <h1 className="text-3xl font-bold">EMI Calculator - Calculate Your Loan EMI Online</h1>
+            <p className="text-sm opacity-80">Home Loan · Car Loan · Personal Loan — Free EMI Calculator with Amortization Schedule</p>
           </div>
 
             <div className="flex flex-wrap items-center gap-3">
@@ -460,7 +460,41 @@ export default function App() {
           </div>
         )}
 
-  <footer className="mt-8 text-center text-xs text-sky-500">Built with ♥ — CalculateYourEmi.in</footer>
+  <footer className={`mt-12 ${cardBg} rounded-2xl shadow-md p-6 ${cardBorder}`}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-sm">
+            <div>
+              <h3 className="font-bold text-lg mb-3">About EMI Calculator</h3>
+              <p className="mb-2">CalculateYourEMI.in is a free online tool to calculate EMI (Equated Monthly Installment) for various types of loans including home loans, car loans, and personal loans in India.</p>
+              <p>Get instant EMI calculations with detailed amortization schedules, interest breakup, and loan comparison features.</p>
+            </div>
+            <div>
+              <h3 className="font-bold text-lg mb-3">Popular Calculators</h3>
+              <ul className="space-y-2">
+                <li>• Home Loan EMI Calculator</li>
+                <li>• Car Loan EMI Calculator</li>
+                <li>• Personal Loan EMI Calculator</li>
+                <li>• Fixed Deposit (FD) Calculator</li>
+                <li>• Recurring Deposit (RD) Calculator</li>
+                <li>• Loan Prepayment Calculator</li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-bold text-lg mb-3">EMI Formula</h3>
+              <p className="mb-2">EMI = [P × R × (1+R)^N] / [(1+R)^N-1]</p>
+              <p className="text-xs opacity-80">Where:</p>
+              <ul className="text-xs opacity-80 space-y-1">
+                <li>P = Loan amount (Principal)</li>
+                <li>R = Monthly interest rate</li>
+                <li>N = Loan tenure in months</li>
+              </ul>
+              <p className="mt-3 text-xs">Our calculator uses this standard formula to provide accurate EMI calculations instantly.</p>
+            </div>
+          </div>
+          <div className="mt-6 pt-6 border-t text-center text-xs opacity-70">
+            <p>© 2024 CalculateYourEMI.in - Free EMI Calculator for Home, Car & Personal Loans | All Rights Reserved</p>
+            <p className="mt-2">Keywords: EMI calculator, loan calculator, home loan EMI, car loan calculator, personal loan EMI, amortization schedule, interest rate calculator, loan comparison India</p>
+          </div>
+        </footer>
       </div>
     </div>
   )
