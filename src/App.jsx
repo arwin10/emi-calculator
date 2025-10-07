@@ -31,37 +31,8 @@ export default function App() {
   useEffect(() => { try { localStorage.setItem('emi_dark', dark ? '1' : '0') } catch(e){} }, [dark])
 
 
-  // Auto-assign IDs to all DOM elements (for UI automation). Adds stable incremental IDs for initial render
-  // and random IDs for dynamically added nodes without IDs.
-  useEffect(() => {
-    let counter = 1;
-    function assignInitialIds(){
-      document.querySelectorAll('body *').forEach(el => {
-        if(!el.id){
-          el.id = `auto-id-${counter++}`;
-        }
-      });
-    }
-    assignInitialIds();
-    const obs = new MutationObserver(muts => {
-      muts.forEach(m => {
-        m.addedNodes.forEach(node => {
-          if(node.nodeType === 1){
-            if(!node.id){
-              node.id = `auto-id-${Math.random().toString(36).slice(2,9)}`;
-            }
-            node.querySelectorAll && node.querySelectorAll('*').forEach(child => {
-              if(!child.id){
-                child.id = `auto-id-${Math.random().toString(36).slice(2,9)}`;
-              }
-            });
-          }
-        });
-      });
-    });
-    obs.observe(document.body, { childList: true, subtree: true });
-    return () => obs.disconnect();
-  }, []);
+  // Removed previous auto ID mutation logic; meaningful static IDs now applied directly in JSX for key elements.
+
 
   const [loanType, setLoanType] = useState('Home')
   const [mode, setMode] = useState('loan') // 'loan' | 'fd' | 'rd'
@@ -141,83 +112,83 @@ export default function App() {
   }
 
   return (
-    <div className={`min-h-screen p-6 ${themeBg}`}>
+    <div id="app-root" className={`min-h-screen p-6 ${themeBg}`}>
       <div className="max-w-6xl mx-auto">
-  <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-3">
+  <header id="site-header" className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-3">
           <div>
-            <h1 className="text-3xl font-bold">EMI Calculator - Calculate Your Loan EMI Online</h1>
-            <p className="text-sm opacity-80">Home Loan · Car Loan · Personal Loan — Free EMI Calculator with Amortization Schedule</p>
+            <h1 id="page-title" className="text-3xl font-bold">EMI Calculator - Calculate Your Loan EMI Online</h1>
+            <p id="page-subtitle" className="text-sm opacity-80">Home Loan · Car Loan · Personal Loan — Free EMI Calculator with Amortization Schedule</p>
           </div>
 
             <div className="flex flex-wrap items-center gap-3">
-            <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={dark} onChange={()=>setDark(d=>!d)} /> Dark</label>
+            <label id="toggle-theme-label" className="flex items-center gap-2 text-sm"><input id="toggle-theme" type="checkbox" checked={dark} onChange={()=>setDark(d=>!d)} /> Dark</label>
             <div className="flex items-center gap-2">
-              <button onClick={()=>setMode('loan')} className={`${mode==='loan' ? 'bg-sky-600 text-white' : (dark ? 'bg-slate-700 text-slate-100' : 'bg-white text-sky-700 border border-sky-300')} px-3 py-1 rounded`}>Loan</button>
-              <button onClick={()=>setMode('fd')} className={`${mode==='fd' ? 'bg-sky-600 text-white' : (dark ? 'bg-slate-700 text-slate-100' : 'bg-white text-sky-700 border border-sky-300')} px-3 py-1 rounded`}>FD</button>
-              <button onClick={()=>setMode('rd')} className={`${mode==='rd' ? 'bg-sky-600 text-white' : (dark ? 'bg-slate-700 text-slate-100' : 'bg-white text-sky-700 border border-sky-300')} px-3 py-1 rounded`}>RD</button>
+              <button id="mode-loan" onClick={()=>setMode('loan')} className={`${mode==='loan' ? 'bg-sky-600 text-white' : (dark ? 'bg-slate-700 text-slate-100' : 'bg-white text-sky-700 border border-sky-300')} px-3 py-1 rounded`}>Loan</button>
+              <button id="mode-fd" onClick={()=>setMode('fd')} className={`${mode==='fd' ? 'bg-sky-600 text-white' : (dark ? 'bg-slate-700 text-slate-100' : 'bg-white text-sky-700 border border-sky-300')} px-3 py-1 rounded`}>FD</button>
+              <button id="mode-rd" onClick={()=>setMode('rd')} className={`${mode==='rd' ? 'bg-sky-600 text-white' : (dark ? 'bg-slate-700 text-slate-100' : 'bg-white text-sky-700 border border-sky-300')} px-3 py-1 rounded`}>RD</button>
             </div>
             <div className="flex gap-2 flex-wrap w-full sm:w-auto">
-              <button onClick={()=>onLoanTypeChange('Home')} className={loanBtnClass('Home')}>Home</button>
-              <button onClick={()=>onLoanTypeChange('Car')} className={loanBtnClass('Car')}>Car</button>
-              <button onClick={()=>onLoanTypeChange('Personal')} className={loanBtnClass('Personal')}>Personal</button>
+              <button id="preset-home" onClick={()=>onLoanTypeChange('Home')} className={loanBtnClass('Home')}>Home</button>
+              <button id="preset-car" onClick={()=>onLoanTypeChange('Car')} className={loanBtnClass('Car')}>Car</button>
+              <button id="preset-personal" onClick={()=>onLoanTypeChange('Personal')} className={loanBtnClass('Personal')}>Personal</button>
             </div>
           </div>
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className={`${cardBg} rounded-2xl shadow-md p-6 ${cardBorder} lg:col-span-2`}>
+          <div id="calculator-section" className={`${cardBg} rounded-2xl shadow-md p-6 ${cardBorder} lg:col-span-2`}>
             {mode === 'loan' && (
               <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium">Loan Type</label>
-                    <select value={loanType} onChange={(e)=>onLoanTypeChange(e.target.value)} className={inputClass}><option>Home</option><option>Car</option><option>Personal</option></select>
+                    <select id="input-loan-type" value={loanType} onChange={(e)=>onLoanTypeChange(e.target.value)} className={inputClass}><option>Home</option><option>Car</option><option>Personal</option></select>
                   </div>
                   <div>
                     <label className="block text-sm font-medium">Start Month</label>
-                    <input type="month" value={startMonth} onChange={(e)=>setStartMonth(e.target.value)} className={inputClass} />
+                    <input id="input-start-month" type="month" value={startMonth} onChange={(e)=>setStartMonth(e.target.value)} className={inputClass} />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium">Principal (₹)</label>
-                    <input type="text" value={formatCurrencyInput(principal)} onChange={(e)=>onNumericInputChange(e,setPrincipal)} className={inputClass} />
+                    <input id="input-principal" type="text" value={formatCurrencyInput(principal)} onChange={(e)=>onNumericInputChange(e,setPrincipal)} className={inputClass} />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium">Annual Interest Rate (%)</label>
-                    <input type="number" step="0.01" value={annualRate} onChange={(e)=>setAnnualRate(Number(e.target.value))} className={inputClass} />
+                    <input id="input-annual-rate" type="number" step="0.01" value={annualRate} onChange={(e)=>setAnnualRate(Number(e.target.value))} className={inputClass} />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium">Tenure (Years)</label>
-                    <input type="number" value={tenureYears} onChange={(e)=>{ const y = Number(e.target.value)||0; setTenureYears(y); setTenureMonths(Math.round(y*12)) }} className={inputClass} />
+                    <input id="input-tenure-years" type="number" value={tenureYears} onChange={(e)=>{ const y = Number(e.target.value)||0; setTenureYears(y); setTenureMonths(Math.round(y*12)) }} className={inputClass} />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium">Tenure (Months)</label>
-                    <input type="number" value={tenureMonths} onChange={(e)=>{ const m = Math.max(0, Math.round(Number(e.target.value)||0)); setTenureMonths(m); setTenureYears(Math.round(m/12)) }} className={inputClass} />
+                    <input id="input-tenure-months" type="number" value={tenureMonths} onChange={(e)=>{ const m = Math.max(0, Math.round(Number(e.target.value)||0)); setTenureMonths(m); setTenureYears(Math.round(m/12)) }} className={inputClass} />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium">Extra Monthly Prepayment (₹)</label>
-                    <input type="text" value={formatCurrencyInput(prepayment)} onChange={(e)=>onNumericInputChange(e,setPrepayment)} className={inputClass} />
+                    <input id="input-prepayment" type="text" value={formatCurrencyInput(prepayment)} onChange={(e)=>onNumericInputChange(e,setPrepayment)} className={inputClass} />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium">Show Amortization Schedule</label>
-                    <select value={showSchedule? 'yes':'no'} onChange={(e)=>setShowSchedule(e.target.value==='yes')} className={inputClass}><option value="yes">Yes</option><option value="no">No</option></select>
+                    <select id="input-show-schedule" value={showSchedule? 'yes':'no'} onChange={(e)=>setShowSchedule(e.target.value==='yes')} className={inputClass}><option value="yes">Yes</option><option value="no">No</option></select>
                   </div>
                 </div>
 
                 <div className="mt-4 flex flex-wrap gap-3 items-center">
-                  <button onClick={() => onLoanTypeChange(loanType)} className="px-4 py-2 rounded-xl bg-sky-600 text-white w-full sm:w-auto">Apply Preset</button>
-                  <button onClick={()=>{ if(calc) { const header = ["MonthNumber","Date","BeginningBalance","Payment","PrincipalPaid","InterestPaid","EndingBalance"]; const rows = calc.schedule.map(r=>[r.monthNumber,r.date,Math.round(r.beginningBalance),Math.round(r.payment),Math.round(r.principalPaid),Math.round(r.interestPaid),Math.round(r.endingBalance)]); const csvContent = [header,...rows].map(r=>r.join(',')).join('\n'); const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href=url; a.download = `${loanType}_emi_schedule.csv`; a.click(); URL.revokeObjectURL(url); } }} disabled={!calc} className="px-4 py-2 rounded-xl bg-white border text-sky-700 w-full sm:w-auto">Export Schedule CSV</button>
+                  <button id="btn-apply-preset" onClick={() => onLoanTypeChange(loanType)} className="px-4 py-2 rounded-xl bg-sky-600 text-white w-full sm:w-auto">Apply Preset</button>
+                  <button id="btn-export-schedule" onClick={()=>{ if(calc) { const header = ["MonthNumber","Date","BeginningBalance","Payment","PrincipalPaid","InterestPaid","EndingBalance"]; const rows = calc.schedule.map(r=>[r.monthNumber,r.date,Math.round(r.beginningBalance),Math.round(r.payment),Math.round(r.principalPaid),Math.round(r.interestPaid),Math.round(r.endingBalance)]); const csvContent = [header,...rows].map(r=>r.join(',')).join('\n'); const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href=url; a.download = `${loanType}_emi_schedule.csv`; a.click(); URL.revokeObjectURL(url); } }} disabled={!calc} className="px-4 py-2 rounded-xl bg-white border text-sky-700 w-full sm:w-auto">Export Schedule CSV</button>
 
-                  <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={showFullTerm} onChange={()=>setShowFullTerm(s=>!s)} /> Full-term bar chart (may be heavy)</label>
+                  <label id="label-fullterm-chart" className="flex items-center gap-2 text-sm"><input id="toggle-fullterm-chart" type="checkbox" checked={showFullTerm} onChange={()=>setShowFullTerm(s=>!s)} /> Full-term bar chart (may be heavy)</label>
 
                   <div className="ml-auto flex gap-2 flex-wrap">
-                    <button onClick={()=>downloadSVGAs('png', pieRef.current)} disabled={!calc} className="px-3 py-2 rounded-md bg-sky-600 text-white w-full sm:w-auto">Export Pie PNG</button>
-                    <button onClick={()=>downloadSVGAs('png', barRef.current)} disabled={!calc} className="px-3 py-2 rounded-md bg-sky-600 text-white w-full sm:w-auto">Export Bar PNG</button>
+                    <button id="btn-export-pie" onClick={()=>downloadSVGAs('png', pieRef.current)} disabled={!calc} className="px-3 py-2 rounded-md bg-sky-600 text-white w-full sm:w-auto">Export Pie PNG</button>
+                    <button id="btn-export-bar" onClick={()=>downloadSVGAs('png', barRef.current)} disabled={!calc} className="px-3 py-2 rounded-md bg-sky-600 text-white w-full sm:w-auto">Export Bar PNG</button>
                   </div>
                 </div>
 
@@ -339,7 +310,7 @@ export default function App() {
 
           </div>
 
-          <aside className={`${cardBg} rounded-2xl shadow-md p-6 ${cardBorder}`}>
+          <aside id="summary-panel" className={`${cardBg} rounded-2xl shadow-md p-6 ${cardBorder}`}>
             <h3 className="font-medium">Summary</h3>
             <div className="mt-3 space-y-2 text-sm">
               {mode === 'loan' && (
@@ -357,7 +328,7 @@ export default function App() {
                       <div>Total Interest Payable: <strong>₹ {formatCurrencyInput(Math.round(calc.totalInterest))}</strong></div>
                       <div>Total Payment: <strong>₹ {formatCurrencyInput(Math.round(calc.totalPaid))}</strong></div>
 
-                      <div className="mt-6 flex justify-center pt-2" ref={pieRef}>
+                      <div id="chart-pie-container" className="mt-6 flex justify-center pt-2" ref={pieRef}>
                         <PieChart width={220} height={220}>
                           <Pie
                             data={pieData}
@@ -423,7 +394,7 @@ export default function App() {
         </div>
 
         {showSchedule && calc && (
-          <div className={`${cardBg} mt-6 rounded-2xl shadow-md p-4 ${cardBorder}`}>
+          <div id="schedule-section" className={`${cardBg} mt-6 rounded-2xl shadow-md p-4 ${cardBorder}`}>
             <h2 className="text-lg font-semibold mb-3">Amortization Schedule</h2>
 
       {/* Pagination controls */}
@@ -439,16 +410,16 @@ export default function App() {
               </div>
 
         <div className="sm:ml-auto flex items-center gap-2 text-sm flex-wrap">
-        <button onClick={()=>setPage(p=>Math.max(1,p-1))} disabled={page<=1} className="px-2 py-1 rounded-md border disabled:opacity-50 w-full sm:w-auto">Prev</button>
+        <button id="pagination-prev" onClick={()=>setPage(p=>Math.max(1,p-1))} disabled={page<=1} className="px-2 py-1 rounded-md border disabled:opacity-50 w-full sm:w-auto">Prev</button>
                 <span>Page</span>
-                <input type="number" value={page} onChange={(e)=>{ const v = Math.max(1, Number(e.target.value)||1); setPage(v); }} className={smallInputClass} />
+                <input id="pagination-page" type="number" value={page} onChange={(e)=>{ const v = Math.max(1, Number(e.target.value)||1); setPage(v); }} className={smallInputClass} />
                 <span>of {Math.max(1, Math.ceil(calc.schedule.length / rowsPerPage))}</span>
-        <button onClick={()=>setPage(p=>Math.min(Math.ceil(calc.schedule.length/rowsPerPage), p+1))} disabled={page>=Math.ceil(calc.schedule.length/rowsPerPage)} className="px-2 py-1 rounded-md border disabled:opacity-50 w-full sm:w-auto">Next</button>
+        <button id="pagination-next" onClick={()=>setPage(p=>Math.min(Math.ceil(calc.schedule.length/rowsPerPage), p+1))} disabled={page>=Math.ceil(calc.schedule.length/rowsPerPage)} className="px-2 py-1 rounded-md border disabled:opacity-50 w-full sm:w-auto">Next</button>
               </div>
             </div>
 
             <div className={`overflow-x-auto rounded-lg border ${dark ? 'border-slate-600' : ''}`}>
-              <table className="min-w-full text-sm divide-y">
+              <table id="amortization-table" className="min-w-full text-sm divide-y">
                 <thead className={`${dark ? 'bg-slate-700 text-slate-100' : 'bg-sky-50'} sticky top-0`}>
                   <tr>
                     <th className="p-2 text-left">#</th>
@@ -493,7 +464,7 @@ export default function App() {
           </div>
         )}
 
-  <footer className={`mt-12 ${cardBg} rounded-2xl shadow-md p-6 ${cardBorder}`}>
+  <footer id="site-footer" className={`mt-12 ${cardBg} rounded-2xl shadow-md p-6 ${cardBorder}`}>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-sm">
             <div>
               <h3 className="font-bold text-lg mb-3">About EMI Calculator</h3>
