@@ -30,6 +30,39 @@ export default function App() {
   })
   useEffect(() => { try { localStorage.setItem('emi_dark', dark ? '1' : '0') } catch(e){} }, [dark])
 
+
+  // Auto-assign IDs to all DOM elements (for UI automation). Adds stable incremental IDs for initial render
+  // and random IDs for dynamically added nodes without IDs.
+  useEffect(() => {
+    let counter = 1;
+    function assignInitialIds(){
+      document.querySelectorAll('body *').forEach(el => {
+        if(!el.id){
+          el.id = `auto-id-${counter++}`;
+        }
+      });
+    }
+    assignInitialIds();
+    const obs = new MutationObserver(muts => {
+      muts.forEach(m => {
+        m.addedNodes.forEach(node => {
+          if(node.nodeType === 1){
+            if(!node.id){
+              node.id = `auto-id-${Math.random().toString(36).slice(2,9)}`;
+            }
+            node.querySelectorAll && node.querySelectorAll('*').forEach(child => {
+              if(!child.id){
+                child.id = `auto-id-${Math.random().toString(36).slice(2,9)}`;
+              }
+            });
+          }
+        });
+      });
+    });
+    obs.observe(document.body, { childList: true, subtree: true });
+    return () => obs.disconnect();
+  }, []);
+
   const [loanType, setLoanType] = useState('Home')
   const [mode, setMode] = useState('loan') // 'loan' | 'fd' | 'rd'
   const [principal, setPrincipal] = useState(loanPresets['Home'].principal)
