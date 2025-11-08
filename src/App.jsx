@@ -63,11 +63,11 @@ export default function App() {
   }
 
   const currencyFormatter = new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 })
-  function formatCurrencyInput(n){ if (n === null || n === undefined || Number.isNaN(Number(n))) return ''; return currencyFormatter.format(Number(n)) }
-  function parseCurrencyInput(str){ if (str === null || str === undefined) return 0; const cleaned = String(str).replace(/[^0-9.-]+/g, ''); const num = Number(cleaned); return Number.isFinite(num) ? num : 0 }
+  function formatCurrencyInput(n){ if (n === null || n === undefined || n === '' || Number.isNaN(Number(n))) return ''; return currencyFormatter.format(Number(n)) }
+  function parseCurrencyInput(str){ if (str === null || str === undefined) return ''; const cleaned = String(str).replace(/[^0-9.-]+/g, ''); if (cleaned === '' || cleaned === '-') return ''; const num = Number(cleaned); return Number.isFinite(num) ? num : '' }
 
   // Use utility
-  const calc = mode === 'loan' ? calculateEMI({ principal, annualRate, months: tenureMonths, extra: prepayment, startMonth }) : null
+  const calc = mode === 'loan' ? calculateEMI({ principal: Number(principal)||0, annualRate: Number(annualRate)||0, months: Number(tenureMonths)||0, extra: Number(prepayment)||0, startMonth }) : null
 
   // FD / RD state
   const [fdPrincipal, setFdPrincipal] = useState(100000)
@@ -79,8 +79,8 @@ export default function App() {
   const [rdRate, setRdRate] = useState(6.5)
   const [rdYears, setRdYears] = useState(5)
 
-  const fdCalc = mode === 'fd' ? calculateFD({ principal: fdPrincipal, annualRate: fdRate, years: fdYears, compoundingPerYear: fdCompounding }) : null
-  const rdCalc = mode === 'rd' ? calculateRD({ monthlyDeposit: rdMonthly, annualRate: rdRate, years: rdYears}) : null
+  const fdCalc = mode === 'fd' ? calculateFD({ principal: Number(fdPrincipal)||0, annualRate: Number(fdRate)||0, years: Number(fdYears)||0, compoundingPerYear: fdCompounding }) : null
+  const rdCalc = mode === 'rd' ? calculateRD({ monthlyDeposit: Number(rdMonthly)||0, annualRate: Number(rdRate)||0, years: Number(rdYears)||0}) : null
 
   const COLORS = ['#1E40AF', '#60A5FA']
   const BAR_CAP = 600
@@ -156,17 +156,17 @@ export default function App() {
 
                   <div>
                     <label className="block text-sm font-medium">Annual Interest Rate (%)</label>
-                    <input id="input-annual-rate" type="number" step="0.01" value={annualRate} onChange={(e)=>setAnnualRate(Number(e.target.value))} className={inputClass} />
+                    <input id="input-annual-rate" type="number" step="0.01" value={annualRate} onChange={(e)=>setAnnualRate(e.target.value === '' ? '' : Number(e.target.value))} className={inputClass} />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium">Tenure (Years)</label>
-                    <input id="input-tenure-years" type="number" value={tenureYears} onChange={(e)=>{ const y = Number(e.target.value)||0; setTenureYears(y); setTenureMonths(Math.round(y*12)) }} className={inputClass} />
+                    <input id="input-tenure-years" type="number" value={tenureYears} onChange={(e)=>{ const y = e.target.value === '' ? '' : Number(e.target.value); setTenureYears(y); setTenureMonths(y === '' ? '' : Math.round(y*12)) }} className={inputClass} />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium">Tenure (Months)</label>
-                    <input id="input-tenure-months" type="number" value={tenureMonths} onChange={(e)=>{ const m = Math.max(0, Math.round(Number(e.target.value)||0)); setTenureMonths(m); setTenureYears(Math.round(m/12)) }} className={inputClass} />
+                    <input id="input-tenure-months" type="number" value={tenureMonths} onChange={(e)=>{ const m = e.target.value === '' ? '' : Math.max(0, Math.round(Number(e.target.value))); setTenureMonths(m); setTenureYears(m === '' ? '' : Math.round(m/12)) }} className={inputClass} />
                   </div>
 
                   <div>
@@ -218,15 +218,15 @@ export default function App() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium">FD Principal (₹)</label>
-                    <input type="number" value={fdPrincipal} onChange={(e)=>setFdPrincipal(Number(e.target.value)||0)} className={inputClass} />
+                    <input type="number" value={fdPrincipal} onChange={(e)=>setFdPrincipal(e.target.value === '' ? '' : Number(e.target.value))} className={inputClass} />
                   </div>
                   <div>
                     <label className="block text-sm font-medium">Rate (% p.a.)</label>
-                    <input type="number" step="0.01" value={fdRate} onChange={(e)=>setFdRate(Number(e.target.value)||0)} className={inputClass} />
+                    <input type="number" step="0.01" value={fdRate} onChange={(e)=>setFdRate(e.target.value === '' ? '' : Number(e.target.value))} className={inputClass} />
                   </div>
                   <div>
                     <label className="block text-sm font-medium">Tenure (Years)</label>
-                    <input type="number" value={fdYears} onChange={(e)=>setFdYears(Number(e.target.value)||0)} className={inputClass} />
+                    <input type="number" value={fdYears} onChange={(e)=>setFdYears(e.target.value === '' ? '' : Number(e.target.value))} className={inputClass} />
                   </div>
                   <div>
                     <label className="block text-sm font-medium">Compounding / year</label>
@@ -265,15 +265,15 @@ export default function App() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium">Monthly Deposit (₹)</label>
-                    <input type="number" value={rdMonthly} onChange={(e)=>setRdMonthly(Number(e.target.value)||0)} className={inputClass} />
+                    <input type="number" value={rdMonthly} onChange={(e)=>setRdMonthly(e.target.value === '' ? '' : Number(e.target.value))} className={inputClass} />
                   </div>
                   <div>
                     <label className="block text-sm font-medium">Rate (% p.a.)</label>
-                    <input type="number" step="0.01" value={rdRate} onChange={(e)=>setRdRate(Number(e.target.value)||0)} className={inputClass} />
+                    <input type="number" step="0.01" value={rdRate} onChange={(e)=>setRdRate(e.target.value === '' ? '' : Number(e.target.value))} className={inputClass} />
                   </div>
                   <div>
                     <label className="block text-sm font-medium">Tenure (Years)</label>
-                    <input type="number" value={rdYears} onChange={(e)=>setRdYears(Number(e.target.value)||0)} className={inputClass} />
+                    <input type="number" value={rdYears} onChange={(e)=>setRdYears(e.target.value === '' ? '' : Number(e.target.value))} className={inputClass} />
                   </div>
                 </div>
                 <div className="mt-4 flex gap-3 items-center flex-wrap">
@@ -317,8 +317,8 @@ export default function App() {
                 <>
                   <div>Loan Type: <strong>{loanType}</strong></div>
                   <div>Principal: <strong>₹ {formatCurrencyInput(principal)}</strong></div>
-                  <div>Annual Rate: <strong>{Number(annualRate)}%</strong></div>
-                  <div>Tenure: <strong>{tenureMonths} months ({tenureYears} yrs)</strong></div>
+                  <div>Annual Rate: <strong>{annualRate === '' ? '0' : Number(annualRate)}%</strong></div>
+                  <div>Tenure: <strong>{tenureMonths === '' ? '0' : tenureMonths} months ({tenureYears === '' ? '0' : tenureYears} yrs)</strong></div>
                   {calc ? (
                     <>
                       <hr className="my-2" />
@@ -355,9 +355,9 @@ export default function App() {
 
               {mode === 'fd' && (
                 <>
-                  <div>FD Principal: <strong>₹ {formatCurrencyInput(fdPrincipal)}</strong></div>
-                  <div>Rate: <strong>{fdRate}% p.a.</strong></div>
-                  <div>Tenure: <strong>{fdYears} years</strong></div>
+                  <div>FD Principal: <strong>₹ {formatCurrencyInput(fdPrincipal === '' ? 0 : fdPrincipal)}</strong></div>
+                  <div>Rate: <strong>{fdRate === '' ? '0' : fdRate}% p.a.</strong></div>
+                  <div>Tenure: <strong>{fdYears === '' ? '0' : fdYears} years</strong></div>
                   {fdCalc ? (
                     <>
                       <hr className="my-2" />
@@ -372,9 +372,9 @@ export default function App() {
 
               {mode === 'rd' && (
                 <>
-                  <div>Monthly Deposit: <strong>₹ {formatCurrencyInput(rdMonthly)}</strong></div>
-                  <div>Rate: <strong>{rdRate}% p.a.</strong></div>
-                  <div>Tenure: <strong>{rdYears} years</strong></div>
+                  <div>Monthly Deposit: <strong>₹ {formatCurrencyInput(rdMonthly === '' ? 0 : rdMonthly)}</strong></div>
+                  <div>Rate: <strong>{rdRate === '' ? '0' : rdRate}% p.a.</strong></div>
+                  <div>Tenure: <strong>{rdYears === '' ? '0' : rdYears} years</strong></div>
                   {rdCalc ? (
                     <>
                       <hr className="my-2" />
