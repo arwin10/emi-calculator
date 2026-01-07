@@ -85,7 +85,6 @@ export default function LoanCalculator({ dark, inputClass, smallInputClass, card
       const PDF = jsPDF.default || jsPDF;
       const doc = new PDF();
 
-      // Helper to safe-format currency for PDF (avoiding utf-8 issues with ₹ symbol)
       const formatForPDF = (val) => {
         const formatted = formatCurrencyInput(Math.round(val));
         return `Rs. ${formatted.replace(/[^\d,\.]/g, '')}`;
@@ -93,10 +92,10 @@ export default function LoanCalculator({ dark, inputClass, smallInputClass, card
 
       // Title
       doc.setFontSize(22);
-      doc.setTextColor(30, 41, 59); // Slate 800
+      doc.setTextColor(30, 41, 59);
       doc.text(`${loanType} Loan EMI Report`, 14, 22);
 
-      // --- Summary Section (Left Side) ---
+      // --- Summary Section ---
       doc.setFontSize(10);
       doc.setTextColor(100);
       doc.text("Loan Details", 14, 32);
@@ -117,7 +116,7 @@ export default function LoanCalculator({ dark, inputClass, smallInputClass, card
 
       doc.text(`Tenure:`, 14, y);
       doc.text(`${tenureYears} Years (${tenureMonths} Months)`, 60, y);
-      y += lineHeight + 4; // extra gap
+      y += lineHeight + 4;
 
       doc.setFont(undefined, 'bold');
       doc.text(`EMI:`, 14, y);
@@ -132,23 +131,20 @@ export default function LoanCalculator({ dark, inputClass, smallInputClass, card
       doc.text(formatForPDF(calc.totalInterest), 60, y);
       doc.setFont(undefined, 'normal');
 
-      // --- Chart Section (Right Side) ---
+      // --- Chart Section ---
       try {
         if (pieRef.current) {
           const imgData = await getChartDataURL(pieRef.current);
           if (imgData) {
-            // Image at X=130, Y=25
             doc.addImage(imgData, 'PNG', 130, 25, 50, 50);
 
-            // Manual Legend below the chart
-            // Principal
-            doc.setFillColor(30, 64, 175); // #1E40AF
+            // Manual Legend
+            doc.setFillColor(30, 64, 175);
             doc.rect(135, 80, 4, 4, 'F');
             doc.setFontSize(10);
             doc.text("Principal", 142, 83);
 
-            // Interest
-            doc.setFillColor(96, 165, 250); // #60A5FA
+            doc.setFillColor(96, 165, 250);
             doc.rect(135, 86, 4, 4, 'F');
             doc.text("Interest", 142, 89);
           }
@@ -162,7 +158,6 @@ export default function LoanCalculator({ dark, inputClass, smallInputClass, card
       const tableRows = [];
 
       calc.schedule.forEach((r) => {
-        // Strip symbol for table too
         const clean = (v) => formatCurrencyInput(Math.round(v)).replace(/[^\d,\.]/g, '');
         tableRows.push([
           r.monthNumber,
@@ -180,7 +175,7 @@ export default function LoanCalculator({ dark, inputClass, smallInputClass, card
           body: tableRows,
           startY: 100,
           styles: { fontSize: 8 },
-          headStyles: { fillColor: [2, 132, 199] } // Sky 600
+          headStyles: { fillColor: [2, 132, 199] }
         });
       }
 
@@ -200,7 +195,7 @@ export default function LoanCalculator({ dark, inputClass, smallInputClass, card
             <button id="preset-car" onClick={() => onLoanTypeChange('Car')} className={selectedBtnClass(loanType === 'Car', dark)}>Car</button>
             <button id="preset-personal" onClick={() => onLoanTypeChange('Personal')} className={selectedBtnClass(loanType === 'Personal', dark)}>Personal</button>
           </div>
-          <label className="flex items-center gap-2 cursor-pointer bg-sky-100 dark:bg-slate-700 px-3 py-1 rounded-lg">
+          <label className="flex items-center gap-2 cursor-pointer">
             <input type="checkbox" checked={compareMode} onChange={e => setCompareMode(e.target.checked)} className="accent-sky-600" />
             <span className="font-medium text-sm">Compare Loans</span>
           </label>
@@ -287,20 +282,30 @@ export default function LoanCalculator({ dark, inputClass, smallInputClass, card
         </div>
 
 
-        <div className="mt-8 flex flex-wrap gap-3 items-center">
+        <div className="mt-8 flex flex-col xl:flex-row flex-wrap gap-4 justify-between items-center">
           {compareMode ? (
-            <div className="text-sm text-slate-500 italic">Adjust sliders to compare scenarios. Disable comparison to view detailed schedule/charts.</div>
+            <div className="text-sm text-slate-500 italic w-full text-center">Adjust sliders to compare scenarios. Disable comparison to view detailed schedule/charts.</div>
           ) : (
             <>
-              <button id="btn-apply-preset" onClick={() => onLoanTypeChange(loanType)} className="px-4 py-2 rounded-xl bg-sky-600 text-white w-full sm:w-auto">Apply Preset</button>
-              <button id="btn-export-pdf" onClick={generatePDF} disabled={!calc} className="px-4 py-2 rounded-xl bg-rose-600 text-white w-full sm:w-auto">Export PDF Report</button>
-              <button id="btn-export-schedule" onClick={() => { if (calc) { const header = ["MonthNumber", "Date", "BeginningBalance", "Payment", "PrincipalPaid", "InterestPaid", "EndingBalance"]; const rows = calc.schedule.map(r => [r.monthNumber, r.date, Math.round(r.beginningBalance), Math.round(r.payment), Math.round(r.principalPaid), Math.round(r.interestPaid), Math.round(r.endingBalance)]); const csvContent = [header, ...rows].map(r => r.join(',')).join('\n'); const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `${loanType}_emi_schedule.csv`; a.click(); URL.revokeObjectURL(url); } }} disabled={!calc} className="px-4 py-2 rounded-xl bg-white border text-sky-700 w-full sm:w-auto">Export CSV</button>
+              {/* Left Group: Main Actions */}
+              <div className="flex flex-wrap gap-3 w-full xl:w-auto justify-center xl:justify-start">
+                <button id="btn-apply-preset" onClick={() => onLoanTypeChange(loanType)} className="px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-700 text-white shadow-sm transition-colors text-sm font-medium">Reset / Apply Preset</button>
+                <div className="h-8 w-px bg-slate-300 dark:bg-slate-600 hidden sm:block mx-1"></div>
+                <button id="btn-export-pdf" onClick={generatePDF} disabled={!calc} className="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white shadow-sm transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed">Export PDF Report</button>
+                <button id="btn-export-schedule" onClick={() => { if (calc) { const header = ["MonthNumber", "Date", "BeginningBalance", "Payment", "PrincipalPaid", "InterestPaid", "EndingBalance"]; const rows = calc.schedule.map(r => [r.monthNumber, r.date, Math.round(r.beginningBalance), Math.round(r.payment), Math.round(r.principalPaid), Math.round(r.interestPaid), Math.round(r.endingBalance)]); const csvContent = [header, ...rows].map(r => r.join(',')).join('\n'); const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `${loanType}_emi_schedule.csv`; a.click(); URL.revokeObjectURL(url); } }} disabled={!calc} className="px-4 py-2 rounded-xl bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-200 shadow-sm hover:bg-slate-50 dark:hover:bg-slate-600 transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed">Export CSV</button>
+              </div>
 
-              <label id="label-fullterm-chart" className="flex items-center gap-2 text-sm"><input id="toggle-fullterm-chart" type="checkbox" checked={showFullTerm} onChange={() => setShowFullTerm(s => !s)} /> Full-term bar chart (may be heavy)</label>
+              {/* Right Group: Chart Options */}
+              <div className="flex flex-wrap gap-4 items-center w-full xl:w-auto justify-center xl:justify-end border-t xl:border-t-0 border-slate-200 dark:border-slate-700 pt-4 xl:pt-0">
+                <label id="label-fullterm-chart" className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300 cursor-pointer hover:text-sky-600 transition-colors">
+                  <input id="toggle-fullterm-chart" type="checkbox" checked={showFullTerm} onChange={() => setShowFullTerm(s => !s)} className="accent-sky-600 w-4 h-4" />
+                  <span>Full-term Chart</span>
+                </label>
 
-              <div className="ml-auto flex gap-2 flex-wrap">
-                <button id="btn-export-pie" onClick={() => downloadSVGAs('png', pieRef.current)} disabled={!calc} className="px-3 py-2 rounded-md bg-sky-600 text-white w-full sm:w-auto">Export Pie PNG</button>
-                <button id="btn-export-bar" onClick={() => downloadSVGAs('png', barRef.current)} disabled={!calc} className="px-3 py-2 rounded-md bg-sky-600 text-white w-full sm:w-auto">Export Bar PNG</button>
+                <div className="flex gap-2">
+                  <button id="btn-export-pie" onClick={() => downloadSVGAs('png', pieRef.current)} disabled={!calc} className="px-3 py-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 text-xs font-medium transition-colors disabled:opacity-50">Save Pie</button>
+                  <button id="btn-export-bar" onClick={() => downloadSVGAs('png', barRef.current)} disabled={!calc} className="px-3 py-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 text-xs font-medium transition-colors disabled:opacity-50">Save Bar</button>
+                </div>
               </div>
             </>
           )}
