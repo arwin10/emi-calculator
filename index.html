@@ -169,6 +169,42 @@
       ]
     }
     </script>
+    
+    <!-- Structured data: HowTo for EMI Calculation -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "HowTo",
+      "name": "How to Calculate EMI",
+      "description": "Step by step guide to calculate EMI for home loan, car loan, or personal loan",
+      "step": [
+        {
+          "@type": "HowToStep",
+          "name": "Enter Loan Amount",
+          "text": "Enter the principal loan amount you wish to borrow (e.g., ₹50,00,000 for a home loan)",
+          "position": 1
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Enter Interest Rate",
+          "text": "Enter the annual interest rate offered by the lender (e.g., 8.5% for home loans)",
+          "position": 2
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Enter Loan Tenure",
+          "text": "Enter the loan repayment period in years or months (e.g., 20 years or 240 months)",
+          "position": 3
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Calculate EMI",
+          "text": "The calculator will automatically compute your monthly EMI, total interest, and total payment amount",
+          "position": 4
+        }
+      ]
+    }
+    </script>
   </head>
   <body>
     <!-- Static content visible to crawlers without JavaScript -->
@@ -184,6 +220,104 @@
             <h2 style="font-size: 24px; font-weight: bold; margin-bottom: 16px;">Free Online EMI Calculator 2025</h2>
             <p style="margin-bottom: 16px; line-height: 1.6;">Calculate EMI (Equated Monthly Installment) for home loans, car loans, and personal loans instantly. Our free online EMI calculator helps you plan your loan repayment with detailed amortization schedules and interest breakup.</p>
             <p style="margin-bottom: 16px; line-height: 1.6;">Whether you're planning to buy a home, purchase a car, or need a personal loan, our calculator provides accurate EMI calculations to help you make informed financial decisions.</p>
+          </section>
+
+          <!-- Calculator Form Section (Crawlable) -->
+          <section style="margin-bottom: 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 100%;">
+            <style>
+              @media (max-width: 768px) {
+                section[style*="grid-template-columns: 1fr 1fr"] {
+                  grid-template-columns: 1fr !important;
+                }
+              }
+            </style>
+            <div style="background: white; padding: 24px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border: 1px solid #e0e7ff;">
+              <h2 style="font-size: 20px; font-weight: bold; margin-bottom: 20px;">EMI Calculator - Enter Loan Details</h2>
+              <form id="emi-calculator-form" aria-label="EMI Calculator Form">
+                <div style="margin-bottom: 16px;">
+                  <label for="loan-type-input" style="display: block; font-weight: 500; margin-bottom: 6px; font-size: 14px;">Loan Type</label>
+                  <select id="loan-type-input" name="loanType" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px;">
+                    <option value="home">Home Loan</option>
+                    <option value="car">Car Loan</option>
+                    <option value="personal">Personal Loan</option>
+                  </select>
+                </div>
+                
+                <div style="margin-bottom: 16px;">
+                  <label for="principal-input" style="display: block; font-weight: 500; margin-bottom: 6px; font-size: 14px;">Loan Amount (Principal in ₹)</label>
+                  <input type="number" id="principal-input" name="principal" value="5000000" min="10000" max="50000000" step="10000" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px;" aria-label="Loan Principal Amount"/>
+                </div>
+                
+                <div style="margin-bottom: 16px;">
+                  <label for="rate-input" style="display: block; font-weight: 500; margin-bottom: 6px; font-size: 14px;">Annual Interest Rate (%)</label>
+                  <input type="number" id="rate-input" name="annualRate" value="8.5" min="1" max="30" step="0.1" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px;" aria-label="Annual Interest Rate"/>
+                </div>
+                
+                <div style="margin-bottom: 16px;">
+                  <label for="tenure-years-input" style="display: block; font-weight: 500; margin-bottom: 6px; font-size: 14px;">Loan Tenure (Years)</label>
+                  <input type="number" id="tenure-years-input" name="tenureYears" value="20" min="1" max="40" step="1" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px;" aria-label="Loan Tenure in Years"/>
+                </div>
+                
+                <div style="margin-bottom: 16px;">
+                  <label for="tenure-months-input" style="display: block; font-weight: 500; margin-bottom: 6px; font-size: 14px;">Loan Tenure (Months)</label>
+                  <input type="number" id="tenure-months-input" name="tenureMonths" value="240" min="1" max="480" step="1" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px;" aria-label="Loan Tenure in Months"/>
+                </div>
+                
+                <div style="margin-bottom: 16px;">
+                  <label for="prepayment-input" style="display: block; font-weight: 500; margin-bottom: 6px; font-size: 14px;">Extra Monthly Prepayment (₹)</label>
+                  <input type="number" id="prepayment-input" name="prepayment" value="0" min="0" max="1000000" step="1000" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px;" aria-label="Extra Monthly Prepayment Amount"/>
+                </div>
+                
+                <button type="button" style="width: 100%; padding: 12px; background: #0ea5e9; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">Calculate EMI</button>
+              </form>
+            </div>
+
+            <!-- Summary Section (Crawlable) -->
+            <div style="background: white; padding: 24px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border: 1px solid #e0e7ff;">
+              <h2 style="font-size: 20px; font-weight: bold; margin-bottom: 20px;">EMI Calculation Summary</h2>
+              <div id="emi-summary" aria-label="EMI Calculation Summary">
+                <div style="margin-bottom: 12px; padding: 12px; background: #f8fafc; border-radius: 6px;">
+                  <div style="font-size: 13px; color: #64748b; margin-bottom: 4px;">Loan Type</div>
+                  <div style="font-size: 16px; font-weight: 600;">Home Loan</div>
+                </div>
+                
+                <div style="margin-bottom: 12px; padding: 12px; background: #f8fafc; border-radius: 6px;">
+                  <div style="font-size: 13px; color: #64748b; margin-bottom: 4px;">Principal Amount</div>
+                  <div style="font-size: 16px; font-weight: 600;">₹50,00,000</div>
+                </div>
+                
+                <div style="margin-bottom: 12px; padding: 12px; background: #f8fafc; border-radius: 6px;">
+                  <div style="font-size: 13px; color: #64748b; margin-bottom: 4px;">Interest Rate</div>
+                  <div style="font-size: 16px; font-weight: 600;">8.5% per annum</div>
+                </div>
+                
+                <div style="margin-bottom: 12px; padding: 12px; background: #f8fafc; border-radius: 6px;">
+                  <div style="font-size: 13px; color: #64748b; margin-bottom: 4px;">Loan Tenure</div>
+                  <div style="font-size: 16px; font-weight: 600;">20 years (240 months)</div>
+                </div>
+                
+                <hr style="margin: 20px 0; border: none; border-top: 1px solid #e2e8f0;"/>
+                
+                <div style="margin-bottom: 12px; padding: 12px; background: #dbeafe; border-radius: 6px;">
+                  <div style="font-size: 13px; color: #1e40af; margin-bottom: 4px;">Monthly EMI</div>
+                  <div style="font-size: 20px; font-weight: 700; color: #1e40af;">₹43,391</div>
+                </div>
+                
+                <div style="margin-bottom: 12px; padding: 12px; background: #f8fafc; border-radius: 6px;">
+                  <div style="font-size: 13px; color: #64748b; margin-bottom: 4px;">Total Interest Payable</div>
+                  <div style="font-size: 16px; font-weight: 600;">₹54,13,840</div>
+                </div>
+                
+                <div style="margin-bottom: 12px; padding: 12px; background: #f8fafc; border-radius: 6px;">
+                  <div style="font-size: 13px; color: #64748b; margin-bottom: 4px;">Total Payment (Principal + Interest)</div>
+                  <div style="font-size: 16px; font-weight: 600;">₹1,04,13,840</div>
+                </div>
+                
+                <div style="margin-top: 16px; padding: 12px; background: #fef3c7; border-radius: 6px; font-size: 12px;">
+                  <strong>Note:</strong> These values are calculated based on default home loan parameters. Use the interactive calculator above for custom calculations.
+                </div>
+              </div>
+            </div>
           </section>
 
           <section style="margin-bottom: 32px;">
@@ -280,12 +414,126 @@
 
           <section style="margin-bottom: 32px;">
             <h2 style="font-size: 22px; font-weight: bold; margin-bottom: 16px;">Additional Financial Calculators</h2>
-            <ul style="margin-left: 20px; line-height: 1.8;">
-              <li><strong>Fixed Deposit (FD) Calculator:</strong> Calculate FD maturity amount and interest earnings</li>
-              <li><strong>Recurring Deposit (RD) Calculator:</strong> Calculate RD maturity value with monthly deposits</li>
-              <li><strong>Loan Prepayment Calculator:</strong> See how extra payments reduce tenure and interest</li>
-              <li><strong>Amortization Schedule:</strong> View detailed month-by-month payment breakup</li>
-            </ul>
+            
+            <!-- FD Calculator (Crawlable) -->
+            <div style="margin-bottom: 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+              <div style="background: white; padding: 24px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border: 1px solid #e0e7ff;">
+                <h3 style="font-size: 18px; font-weight: bold; margin-bottom: 16px;">Fixed Deposit (FD) Calculator</h3>
+                <form id="fd-calculator-form" aria-label="Fixed Deposit Calculator">
+                  <div style="margin-bottom: 12px;">
+                    <label for="fd-principal" style="display: block; font-weight: 500; margin-bottom: 6px; font-size: 14px;">FD Amount (₹)</label>
+                    <input type="number" id="fd-principal" name="fdPrincipal" value="100000" min="1000" max="10000000" step="1000" style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px;" aria-label="Fixed Deposit Amount"/>
+                  </div>
+                  <div style="margin-bottom: 12px;">
+                    <label for="fd-rate" style="display: block; font-weight: 500; margin-bottom: 6px; font-size: 14px;">Interest Rate (% p.a.)</label>
+                    <input type="number" id="fd-rate" name="fdRate" value="6.5" min="1" max="15" step="0.1" style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px;" aria-label="FD Interest Rate"/>
+                  </div>
+                  <div style="margin-bottom: 12px;">
+                    <label for="fd-years" style="display: block; font-weight: 500; margin-bottom: 6px; font-size: 14px;">Tenure (Years)</label>
+                    <input type="number" id="fd-years" name="fdYears" value="5" min="1" max="20" step="1" style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px;" aria-label="FD Tenure"/>
+                  </div>
+                  <div style="margin-bottom: 12px;">
+                    <label for="fd-compounding" style="display: block; font-weight: 500; margin-bottom: 6px; font-size: 14px;">Compounding Frequency</label>
+                    <select id="fd-compounding" name="fdCompounding" style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px;">
+                      <option value="1">Annually</option>
+                      <option value="2">Semi-Annually</option>
+                      <option value="4" selected>Quarterly</option>
+                      <option value="12">Monthly</option>
+                    </select>
+                  </div>
+                  <button type="button" style="width: 100%; padding: 10px; background: #10b981; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">Calculate FD Maturity</button>
+                </form>
+              </div>
+              
+              <div style="background: white; padding: 24px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border: 1px solid #e0e7ff;">
+                <h3 style="font-size: 18px; font-weight: bold; margin-bottom: 16px;">FD Maturity Summary</h3>
+                <div id="fd-summary" aria-label="FD Maturity Summary">
+                  <div style="margin-bottom: 10px; padding: 10px; background: #f8fafc; border-radius: 6px;">
+                    <div style="font-size: 13px; color: #64748b;">Principal Amount</div>
+                    <div style="font-size: 16px; font-weight: 600;">₹1,00,000</div>
+                  </div>
+                  <div style="margin-bottom: 10px; padding: 10px; background: #f8fafc; border-radius: 6px;">
+                    <div style="font-size: 13px; color: #64748b;">Interest Rate</div>
+                    <div style="font-size: 16px; font-weight: 600;">6.5% p.a.</div>
+                  </div>
+                  <div style="margin-bottom: 10px; padding: 10px; background: #f8fafc; border-radius: 6px;">
+                    <div style="font-size: 13px; color: #64748b;">Tenure</div>
+                    <div style="font-size: 16px; font-weight: 600;">5 years</div>
+                  </div>
+                  <hr style="margin: 16px 0; border: none; border-top: 1px solid #e2e8f0;"/>
+                  <div style="margin-bottom: 10px; padding: 10px; background: #d1fae5; border-radius: 6px;">
+                    <div style="font-size: 13px; color: #065f46;">Maturity Amount</div>
+                    <div style="font-size: 18px; font-weight: 700; color: #065f46;">₹1,37,714</div>
+                  </div>
+                  <div style="margin-bottom: 10px; padding: 10px; background: #f8fafc; border-radius: 6px;">
+                    <div style="font-size: 13px; color: #64748b;">Total Interest Earned</div>
+                    <div style="font-size: 16px; font-weight: 600;">₹37,714</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- RD Calculator (Crawlable) -->
+            <div style="margin-bottom: 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+              <div style="background: white; padding: 24px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border: 1px solid #e0e7ff;">
+                <h3 style="font-size: 18px; font-weight: bold; margin-bottom: 16px;">Recurring Deposit (RD) Calculator</h3>
+                <form id="rd-calculator-form" aria-label="Recurring Deposit Calculator">
+                  <div style="margin-bottom: 12px;">
+                    <label for="rd-monthly" style="display: block; font-weight: 500; margin-bottom: 6px; font-size: 14px;">Monthly Deposit (₹)</label>
+                    <input type="number" id="rd-monthly" name="rdMonthly" value="2000" min="100" max="100000" step="100" style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px;" aria-label="Monthly Deposit Amount"/>
+                  </div>
+                  <div style="margin-bottom: 12px;">
+                    <label for="rd-rate" style="display: block; font-weight: 500; margin-bottom: 6px; font-size: 14px;">Interest Rate (% p.a.)</label>
+                    <input type="number" id="rd-rate" name="rdRate" value="6.5" min="1" max="15" step="0.1" style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px;" aria-label="RD Interest Rate"/>
+                  </div>
+                  <div style="margin-bottom: 12px;">
+                    <label for="rd-years" style="display: block; font-weight: 500; margin-bottom: 6px; font-size: 14px;">Tenure (Years)</label>
+                    <input type="number" id="rd-years" name="rdYears" value="5" min="1" max="20" step="1" style="width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px;" aria-label="RD Tenure"/>
+                  </div>
+                  <button type="button" style="width: 100%; padding: 10px; background: #8b5cf6; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">Calculate RD Maturity</button>
+                </form>
+              </div>
+              
+              <div style="background: white; padding: 24px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border: 1px solid #e0e7ff;">
+                <h3 style="font-size: 18px; font-weight: bold; margin-bottom: 16px;">RD Maturity Summary</h3>
+                <div id="rd-summary" aria-label="RD Maturity Summary">
+                  <div style="margin-bottom: 10px; padding: 10px; background: #f8fafc; border-radius: 6px;">
+                    <div style="font-size: 13px; color: #64748b;">Monthly Deposit</div>
+                    <div style="font-size: 16px; font-weight: 600;">₹2,000</div>
+                  </div>
+                  <div style="margin-bottom: 10px; padding: 10px; background: #f8fafc; border-radius: 6px;">
+                    <div style="font-size: 13px; color: #64748b;">Interest Rate</div>
+                    <div style="font-size: 16px; font-weight: 600;">6.5% p.a.</div>
+                  </div>
+                  <div style="margin-bottom: 10px; padding: 10px; background: #f8fafc; border-radius: 6px;">
+                    <div style="font-size: 13px; color: #64748b;">Tenure</div>
+                    <div style="font-size: 16px; font-weight: 600;">5 years (60 months)</div>
+                  </div>
+                  <hr style="margin: 16px 0; border: none; border-top: 1px solid #e2e8f0;"/>
+                  <div style="margin-bottom: 10px; padding: 10px; background: #ede9fe; border-radius: 6px;">
+                    <div style="font-size: 13px; color: #5b21b6;">Maturity Amount</div>
+                    <div style="font-size: 18px; font-weight: 700; color: #5b21b6;">₹1,40,965</div>
+                  </div>
+                  <div style="margin-bottom: 10px; padding: 10px; background: #f8fafc; border-radius: 6px;">
+                    <div style="font-size: 13px; color: #64748b;">Total Principal</div>
+                    <div style="font-size: 16px; font-weight: 600;">₹1,20,000</div>
+                  </div>
+                  <div style="margin-bottom: 10px; padding: 10px; background: #f8fafc; border-radius: 6px;">
+                    <div style="font-size: 13px; color: #64748b;">Total Interest Earned</div>
+                    <div style="font-size: 16px; font-weight: 600;">₹20,965</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-top: 24px;">
+              <h3 style="font-size: 18px; font-weight: bold; margin-bottom: 12px;">Other Features</h3>
+              <ul style="margin-left: 20px; line-height: 1.8;">
+                <li><strong>Loan Prepayment Calculator:</strong> See how extra payments reduce tenure and interest</li>
+                <li><strong>Amortization Schedule:</strong> View detailed month-by-month payment breakup</li>
+                <li><strong>Loan Comparison Tool:</strong> Compare multiple loan offers side by side</li>
+              </ul>
+            </div>
           </section>
 
           <section style="margin-bottom: 32px;">
