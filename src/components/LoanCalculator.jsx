@@ -355,7 +355,7 @@ export default function LoanCalculator({ dark, inputClass, smallInputClass, card
             </div>
 
             {calc && calc2 && (
-              <div className="p-3 bg-slate-100 dark:bg-slate-700 rounded-lg">
+              <div className="p-3 rounded-lg">
                 <strong className="block text-center text-xs uppercase text-slate-500 mb-1">Difference (A - B)</strong>
                 <div className="flex justify-between items-center text-xs">
                   <span>EMI Diff:</span>
