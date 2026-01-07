@@ -132,7 +132,7 @@ export default function App() {
             </div>
           </div>
           <div className="mt-6 pt-6 border-t text-center text-xs opacity-70">
-            <p>© 2025 CalculateYourEMI.in - Free EMI Calculator for Home, Car & Personal Loans | All Rights Reserved</p>
+            <p>© 2026 CalculateYourEMI.in - Free EMI Calculator for Home, Car & Personal Loans | All Rights Reserved | Powered By Softech Enterprises</p>
             <p className="mt-2">Keywords: EMI calculator, Calculate your emi, emi calculator,loan calculator, home loan EMI, car loan calculator, personal loan EMI, amortization schedule, interest rate calculator, loan comparison India</p>
           </div>
         </footer>
